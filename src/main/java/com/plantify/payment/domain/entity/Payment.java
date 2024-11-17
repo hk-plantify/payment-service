@@ -10,9 +10,16 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(
+        indexes = {
+                @Index(name = "idx_payment_userId", columnList = "userId"),
+                @Index(name = "idx_payment_status", columnList = "status"),
+                @Index(name = "idx_payment_orderId", columnList = "orderId")
+        }
+)
 public class Payment {
 
     @Id
@@ -29,23 +36,26 @@ public class Payment {
     @Column(nullable = false)
     private Long sellerId;
 
+    @Column(nullable = false)
+    private Long orderId;
+
+    @Column(nullable = false)
+    private String orderName;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private String failureReason;
-
     @Column(nullable = false)
     private Long amount;
+
+    @Column(nullable = true)
+    private String failureReason;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-
-    private Long orderId;
-
-    private String orderName;
 
     @PrePersist
     protected void onCreate() {
