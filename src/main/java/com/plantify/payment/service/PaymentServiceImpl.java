@@ -1,6 +1,7 @@
 package com.plantify.payment.service;
 
 import com.plantify.payment.domain.dto.request.PaymentRequest;
+import com.plantify.payment.domain.dto.request.PaymentUpdateRequest;
 import com.plantify.payment.domain.dto.response.PaymentResponse;
 import com.plantify.payment.domain.entity.Payment;
 import com.plantify.payment.domain.entity.Status;
@@ -19,14 +20,22 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PaymentServiceImpl implements PaymentService, InternalService {
+public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final AuthenticationService authenticationService;
 
     @Override
     public List<PaymentResponse> getAllPayments() {
-        return paymentRepository.findAll()
+        if(authenticationService.validateAdminRole()) {
+            return paymentRepository.findAll()
+                    .stream()
+                    .map(PaymentResponse::from)
+                    .collect(Collectors.toList());
+
+        }
+        Long userId = authenticationService.getUserId();
+        return paymentRepository.findByUserId(userId)
                 .stream()
                 .map(PaymentResponse::from)
                 .collect(Collectors.toList());
@@ -51,17 +60,14 @@ public class PaymentServiceImpl implements PaymentService, InternalService {
     }
 
     @Override
-    public PaymentResponse cancelPayment(Long paymentId) {
+    public PaymentResponse updatePaymentStatus(Long paymentId, PaymentUpdateRequest request) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new ApplicationException(PaymentErrorCode.PAYMENT_NOT_FOUND));
 
-        if (payment.getStatus() != Status.PENDING) {
-            throw new ApplicationException(PaymentErrorCode.PAYMENT_CANCELED);
-        }
         authenticationService.validateOwnership(payment.getUserId());
 
         Payment updatedPayment = payment.toBuilder()
-                .status(Status.CANCELLED)
+                .status(request.status())
                 .build();
         Payment savedPayment = paymentRepository.save(updatedPayment);
 
@@ -69,44 +75,12 @@ public class PaymentServiceImpl implements PaymentService, InternalService {
     }
 
     @Override
-    public PaymentResponse updatePayment(Long paymentId, Status status) {
-        Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new ApplicationException(PaymentErrorCode.PAYMENT_NOT_FOUND));
-        validateStatusTransition(status, payment);
-
-        authenticationService.validateOwnership(payment.getUserId());
-
-        Payment updatedPayment = payment.toBuilder()
-                .status(status)
-                .build();
-        Payment savedPayment = paymentRepository.save(updatedPayment);
-
-        return PaymentResponse.from(savedPayment);
-    }
-
-    @Override
-    public List<PaymentResponse> getPaymentsByUser() {
-        Long userId = authenticationService.getUserId();
+    public List<PaymentResponse> getPaymentsByUser(Long userId) {
+        authenticationService.validateAdminRole();
         return paymentRepository.findByUserId(userId)
                 .stream()
                 .map(PaymentResponse::from)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public Status validateStatusTransition(Status status, Payment payment) {
-        Status currentStatus = payment.getStatus();
-
-        if (currentStatus == Status.PENDING && !(status == Status.PROCESSING || status == Status.CANCELLED || status == Status.FAILED)) {
-            throw new ApplicationException(PaymentErrorCode.INVALID_PAYMENT_STATUS);
-        }
-        if (currentStatus == Status.PROCESSING && !(status == Status.COMPLETED || status == Status.FAILED)) {
-            throw new ApplicationException(PaymentErrorCode.INVALID_PAYMENT_STATUS);
-        }
-        if (currentStatus == Status.COMPLETED) {
-            throw new ApplicationException(PaymentErrorCode.PAYMENT_CANCELED);
-        }
-        return currentStatus;
     }
 
 }

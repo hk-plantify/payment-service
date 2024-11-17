@@ -8,11 +8,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserInfoProvider userInfoProvider;
+    private final List<String> adminRoles;
+
+    @Override
+    public boolean validateAdminRole() {
+        String role = userInfoProvider.getUserInfo().role();
+        if (adminRoles.contains(role)) {
+            return true;
+        }
+        throw new ApplicationException(PaymentErrorCode.UNAUTHORIZED_ACCESS);
+    }
 
     @Override
     public void validateOwnership(Long ownerId) {

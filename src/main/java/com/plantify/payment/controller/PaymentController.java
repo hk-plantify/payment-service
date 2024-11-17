@@ -1,6 +1,7 @@
 package com.plantify.payment.controller;
 
 import com.plantify.payment.domain.dto.request.PaymentRequest;
+import com.plantify.payment.domain.dto.request.PaymentUpdateRequest;
 import com.plantify.payment.domain.dto.response.PaymentResponse;
 import com.plantify.payment.domain.entity.Status;
 import com.plantify.payment.global.response.ApiResponse;
@@ -24,36 +25,28 @@ public class PaymentController {
         return ResponseEntity.ok(ApiResponse.ok(allPayments));
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<PaymentResponse>> createPayment(
-            @RequestBody PaymentRequest request) {
-        PaymentResponse payment = paymentService.createPayment(request);
-        return ResponseEntity.ok(ApiResponse.ok(payment));
-    }
-
     @GetMapping("/{paymentId}")
     public ResponseEntity<ApiResponse<PaymentResponse>> getPayment(@PathVariable Long paymentId) {
-        PaymentResponse payment = paymentService.getPayment(paymentId);
-        return ResponseEntity.ok(ApiResponse.ok(payment));
-    }
-
-    @PostMapping("/{paymentId}/cancel")
-    public ResponseEntity<ApiResponse<PaymentResponse>> cancelPayment(
-            @PathVariable Long paymentId) {
-        PaymentResponse response = paymentService.cancelPayment(paymentId);
+        PaymentResponse response = paymentService.getPayment(paymentId);
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
-    @PutMapping("/{paymentId}/status")
-    public ResponseEntity<ApiResponse<PaymentResponse>> updatePayment(
-            @PathVariable Long paymentId, @RequestParam Status status) {
-        PaymentResponse response = paymentService.updatePayment(paymentId, status);
+    @PostMapping
+    public ResponseEntity<ApiResponse<PaymentResponse>> createPayment(@RequestBody PaymentRequest request) {
+        PaymentResponse response = paymentService.createPayment(request);
+        return ResponseEntity.ok(ApiResponse.ok(response));
+    }
+
+    @PutMapping("/{paymentId}")
+    public ResponseEntity<ApiResponse<PaymentResponse>> updatePaymentStatus(
+            @PathVariable Long paymentId, @RequestBody PaymentUpdateRequest request) {
+        PaymentResponse response = paymentService.updatePaymentStatus(paymentId, request);
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<ApiResponse<List<PaymentResponse>>> getPaymentsByUser() {
-        List<PaymentResponse> payments = paymentService.getPaymentsByUser();
+    public ResponseEntity<ApiResponse<List<PaymentResponse>>> getPaymentsByUser(@PathVariable Long userId) {
+        List<PaymentResponse> payments = paymentService.getPaymentsByUser(userId);
         return ResponseEntity.ok(ApiResponse.ok(payments));
     }
 }
