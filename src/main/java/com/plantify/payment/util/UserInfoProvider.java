@@ -1,4 +1,4 @@
-package com.plantify.payment.client;
+package com.plantify.payment.util;
 
 import com.plantify.payment.domain.dto.response.AuthUserResponse;
 import com.plantify.payment.global.exception.ApplicationException;
