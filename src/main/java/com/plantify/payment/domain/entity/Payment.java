@@ -48,6 +48,9 @@ public class Payment {
     @Column(nullable = false)
     private Long amount;
 
+    @Column(nullable = false)
+    private Method method;
+
     @Column(nullable = true)
     private String failureReason;
 

@@ -5,29 +5,22 @@ import com.plantify.payment.domain.entity.Status;
 
 import java.time.LocalDateTime;
 
-public record PaymentResponse(
+public record PaymentUserResponse(
         Long paymentId,
         Long userId,
-        Long sellerId,
-        Status status,
-        String failureReason,
-        Long amount,
         Long orderId,
-        String orderName,
+        Long amount,
+        Status status,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
-
-    public static PaymentResponse from(Payment payment) {
-        return new PaymentResponse(
+    public static PaymentUserResponse from(Payment payment) {
+        return new PaymentUserResponse(
                 payment.getPaymentId(),
                 payment.getUserId(),
-                payment.getSellerId(),
-                payment.getStatus(),
-                payment.getFailureReason(),
-                payment.getAmount(),
                 payment.getOrderId(),
-                payment.getOrderName(),
+                payment.getAmount(),
+                payment.getStatus(),
                 payment.getCreatedAt(),
                 payment.getUpdatedAt()
         );
