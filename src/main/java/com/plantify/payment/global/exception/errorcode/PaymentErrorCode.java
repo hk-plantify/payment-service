@@ -16,7 +16,8 @@ public enum PaymentErrorCode implements ErrorCode {
     PAYMENT_AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "결제 금액이 일치하지 않습니다."),
     PAYMENT_CANCELED(HttpStatus.BAD_REQUEST, "이미 취소된 결제입니다."),
     EXPIRED_PAYMENT(HttpStatus.BAD_REQUEST, "결제가 만료되었습니다."),
-    INVALID_PAYMENT_STATUS(HttpStatus.BAD_REQUEST, "유효하지 않은 결제 상태입니다.");
+    INVALID_PAYMENT_STATUS(HttpStatus.BAD_REQUEST, "유효하지 않은 결제 상태입니다."),
+    CONCURRENT_UPDATE(HttpStatus.CONFLICT, "동시에 처리 중인 요청이 있습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
