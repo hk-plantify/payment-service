@@ -12,7 +12,6 @@ public record PaymentAdminResponse(
         Long orderId,
         Long amount,
         Status status,
-        String reason,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -24,7 +23,6 @@ public record PaymentAdminResponse(
                 payment.getOrderId(),
                 payment.getAmount(),
                 payment.getStatus(),
-                payment.getFailureReason(),
                 payment.getCreatedAt(),
                 payment.getUpdatedAt()
         );
