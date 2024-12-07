@@ -1,19 +1,25 @@
 package com.plantify.payment.domain.dto.request;
 
+import com.plantify.payment.domain.entity.Method;
 import com.plantify.payment.domain.entity.Payment;
 import com.plantify.payment.domain.entity.Status;
 
-public record PaymentUserRequest(
-        Long sellerId,
+public record PaymentRequest(
+        Long userId,
         Long orderId,
+        String orderName,
+        Long sellerId,
         Long amount
 ) {
-    public Payment toEntity(Long userId) {
+
+    public Payment toEntity() {
         return Payment.builder()
                 .userId(userId)
-                .sellerId(sellerId)
                 .orderId(orderId)
+                .orderName(orderName)
+                .sellerId(sellerId)
                 .amount(amount)
+                .method(Method.PAY)
                 .status(Status.PENDING)
                 .build();
     }

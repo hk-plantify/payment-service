@@ -23,11 +23,14 @@ spring:
     consumer:
       group-id: payment-service-group
       auto-offset-reset: earliest
+#      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.ByteArrayDeserializer
     producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     topic:
-      transaction-status: transaction.status
+      transaction-status: transaction.status-7
   data:
     redis:
       host: localhost
@@ -42,7 +45,7 @@ spring:
 
 auth:
   service:
-    url: http://localhost:8080
+    url: http://localhost:8888
 
 server:
-  port: 9091
+  port: 3333

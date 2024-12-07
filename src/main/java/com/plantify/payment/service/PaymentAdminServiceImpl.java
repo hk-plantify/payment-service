@@ -37,11 +37,7 @@ public class PaymentAdminServiceImpl implements PaymentAdminService {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new ApplicationException(PaymentErrorCode.PAYMENT_NOT_FOUND));
 
-        payment = payment.toBuilder()
-                .status(request.status())
-                .failureReason(request.reason())
-                .build();
-        paymentRepository.save(payment);
+        payment.updateStatus(request.status());
         return PaymentAdminResponse.from(payment);
     }
 

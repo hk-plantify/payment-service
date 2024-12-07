@@ -13,13 +13,6 @@ import java.time.LocalDateTime;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(
-        indexes = {
-                @Index(name = "idx_payment_userId", columnList = "userId"),
-                @Index(name = "idx_payment_status", columnList = "status"),
-                @Index(name = "idx_payment_orderId", columnList = "orderId")
-        }
-)
 public class Payment {
 
     @Id
@@ -31,9 +24,6 @@ public class Payment {
     private Long userId;
 
     @Column(nullable = false)
-    private Long payId;
-
-    @Column(nullable = false)
     private Long sellerId;
 
     @Column(nullable = false)
@@ -43,16 +33,15 @@ public class Payment {
     private String orderName;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
     @Column(nullable = false)
     private Long amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Method method;
-
-    @Column(nullable = true)
-    private String failureReason;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -69,5 +58,9 @@ public class Payment {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+    public void updateStatus(Status status) {
+        this.status = status;
     }
 }

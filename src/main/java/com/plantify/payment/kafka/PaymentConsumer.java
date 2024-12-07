@@ -5,6 +5,7 @@ import com.plantify.payment.service.PaymentTransactionStatusService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,9 +15,6 @@ public class PaymentConsumer {
 
     private final PaymentTransactionStatusService paymentTransactionStatusService;
 
-    private static final String SUCCESS_STATUS = "SUCCESS";
-    private static final String FAILED_STATUS = "FAILED";
-
     @KafkaListener(
             topics = "${spring.kafka.topic.transaction-status}",
             groupId = "${spring.kafka.consumer.group-id}",
@@ -25,8 +23,8 @@ public class PaymentConsumer {
     public void handleTransactionStatus(TransactionStatusMessage message) {
         try {
             switch (message.status()) {
-                case SUCCESS_STATUS -> paymentTransactionStatusService.processSuccessfulTransaction(message);
-                case FAILED_STATUS -> paymentTransactionStatusService.processFailedTransaction(message);
+                case SUCCESS -> paymentTransactionStatusService.processSuccessfulTransaction(message);
+                case FAILED -> paymentTransactionStatusService.processFailedTransaction(message);
                 default -> log.warn("Unknown status: {}", message.status());
             }
         } catch (Exception e) {
