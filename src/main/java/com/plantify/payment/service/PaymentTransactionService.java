@@ -1,9 +1,9 @@
 package com.plantify.payment.service;
 
-import com.plantify.payment.domain.dto.TransactionRequest;
-import com.plantify.payment.domain.dto.TransactionResponse;
+import com.plantify.payment.domain.dto.response.PaymentResponse;
+import com.plantify.payment.domain.dto.request.PaymentRequest;
 
 public interface PaymentTransactionService {
 
-    TransactionResponse processPayment(TransactionRequest request);
+    PaymentResponse processPayment(PaymentRequest request);
 }
