@@ -25,11 +25,10 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
-                                "/v1/payments/**"
+                                "/v1/payments/**",
+                                "/v1/admin/**",
+                                ""
                         ).permitAll()
-
-                        .requestMatchers(HttpMethod.GET, "/v1/admin/**")
-                        .hasAnyRole("MANAGER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
