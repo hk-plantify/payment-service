@@ -20,7 +20,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   data:
     redis:
-      host: localhost
+      host: redis-master.kafka.svc.cluster.local
       port: 6379
       password:
       timeout: 2000ms
