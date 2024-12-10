@@ -9,7 +9,7 @@ public record PaymentAdminResponse(
         Long paymentId,
         Long userId,
         Long sellerId,
-        Long orderId,
+        String orderId,
         Long amount,
         Status status,
         LocalDateTime createdAt,

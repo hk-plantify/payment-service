@@ -6,7 +6,7 @@ import com.plantify.payment.domain.entity.Status;
 
 public record PaymentRequest(
         Long userId,
-        Long orderId,
+        String orderId,
         String orderName,
         Long sellerId,
         Long amount
