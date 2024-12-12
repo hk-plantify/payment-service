@@ -1,6 +1,7 @@
 package com.plantify.payment.service;
 
 import com.plantify.payment.client.PayServiceClient;
+import com.plantify.payment.domain.dto.request.PayBalanceRequest;
 import com.plantify.payment.domain.dto.response.PaymentResponse;
 import com.plantify.payment.domain.dto.request.PaymentRequest;
 import com.plantify.payment.domain.entity.Status;
@@ -34,7 +35,8 @@ public class PaymentTransactionServiceImpl implements PaymentTransactionService 
             Payment payment = paymentRepository.save(request.toEntity());
 
             try {
-                payServiceClient.checkPayBalance(request.amount());
+                PayBalanceRequest balanceRequest = new PayBalanceRequest(request.userId(), request.amount());
+                payServiceClient.checkPayBalance(balanceRequest);
                 payment.updateStatus(Status.SUCCESS);
             } catch (ApplicationException ex) {
                 if (ex.getHttpStatus() == HttpStatus.BAD_REQUEST) {
