@@ -6,35 +6,29 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Payment {
+public class Payment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private Long paymentId;
 
     @Column(nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
-    private Long sellerId;
+    @Column(nullable = false, unique = true)
+    private Long transactionId;
 
     @Column(nullable = false, unique = true)
     private String orderId;
 
     @Column(nullable = false)
     private String orderName;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
 
     @Column(nullable = false)
     private Long amount;
@@ -43,21 +37,16 @@ public class Payment {
     @Column(nullable = false)
     private Method method;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private Status status;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
+    @Column
+    private String reason;
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+    public Payment updateReason(String reason) {
+        this.reason = reason;
+        return this;
     }
 
     public void updateStatus(Status status) {
