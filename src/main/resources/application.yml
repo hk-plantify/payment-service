@@ -20,7 +20,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   data:
     redis:
-      host: localhost
+      host: redis-master.kafka.svc.cluster.local
       port: 6379
       password: NRCwHXG7HR
       timeout: 2000ms
@@ -32,10 +32,10 @@ spring:
 
 auth:
   service:
-    url: http://auth-service.auth.svc.cluster:local:8080
+    url: http://auth-service.auth.svc.cluster.local:8080
 pay:
   service:
-    url: http://pay-servce.pay.svc.cluster.local:8080
+    url: http://pay-service.pay.svc.cluster.local:8080
 
 client:
   base:
