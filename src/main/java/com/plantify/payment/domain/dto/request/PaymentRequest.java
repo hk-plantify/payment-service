@@ -6,18 +6,18 @@ import com.plantify.payment.domain.entity.Status;
 
 public record PaymentRequest(
         Long userId,
-        Long orderId,
+        Long transactionId,
+        String orderId,
         String orderName,
-        Long sellerId,
         Long amount
 ) {
 
     public Payment toEntity() {
         return Payment.builder()
                 .userId(userId)
+                .transactionId(transactionId)
                 .orderId(orderId)
                 .orderName(orderName)
-                .sellerId(sellerId)
                 .amount(amount)
                 .method(Method.PAY)
                 .status(Status.PENDING)
