@@ -1,3 +1,44 @@
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+    password: ${JASYPT_PASSWORD}
+
 spring:
   application:
     name: payment
+  datasource:
+    url: ENC(XYQfF38yBcoqFC1fHT1r+F+pC0DoqsFGsSCI/if3s7/5HNL3UcVkpWZgnrReBc0LPeUJANdVya4eILW/IEl/AACLm6357c2bpJudUeBtMo0=)
+    username: ENC(XhGT41xwg0J9hSXkV9tPjQ==)
+    password: ENC(cOWaniGDoCFEXR9v+wRBVEwsJ5Hg6vQN)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  data:
+    redis:
+      host: redis-master.kafka.svc.cluster.local
+      port: 6379
+      password: NRCwHXG7HR
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+auth:
+  service:
+    url: http://auth-service.auth.svc.cluster.local:8080
+pay:
+  service:
+    url: http://pay-service.pay.svc.cluster.local:8080
+
+client:
+  base:
+    url: ENC(6glvmh8vfHd2D/ALcgqR+tXcm+DH+AZbkofU7nK5p2eE0RzPXoNE1uHTORYrT/dA)
+  pay:
+    url: ENC(YKKOs+X8eUEdzzngWa8yjQlR4W0uy69aKFe1AMAee9FP2nauBEWpCM6FyDXpbIprBGi7LReqA4M=)
