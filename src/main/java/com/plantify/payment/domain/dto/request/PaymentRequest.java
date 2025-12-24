@@ -5,14 +5,13 @@ import com.plantify.payment.domain.entity.Payment;
 import com.plantify.payment.domain.entity.Status;
 
 public record PaymentRequest(
-        Long userId,
         Long transactionId,
         String orderId,
         String orderName,
         Long amount
 ) {
 
-    public Payment toEntity() {
+    public Payment toEntity(Long userId) {
         return Payment.builder()
                 .userId(userId)
                 .transactionId(transactionId)
